@@ -111,6 +111,8 @@ damage your files.
 
 ## Software needed
 
+NEFSC users will need helpdesk to install Python and node.js.
+
 Python
 node.js
 mermaid
@@ -146,15 +148,14 @@ it was installed without the PATH option. Do Step 1b.
 
 ## Step 2 — Install Mermaid, the drawing program the diagrams now use
 
-The diagrams are drawn by Mermaid by default. Graphviz from Step 3 is still
-used for one of the three diagrams (see Step 7b), so you want both — but if you
-skip this step, the script will stop and tell you so.
+The diagrams are drawn by Mermaid by default. Graphviz can be used for one
+of the three diagrams (see Step 7b)
 
 Mermaid runs on Node.js, which is a separate install:
 
 1. Download Node.js from <https://nodejs.org> — take the button labelled
    **LTS** (the stable one), and click through the installer accepting the
-   defaults.
+   defaults.  
 2. **Close your terminal and open a fresh one.** The installer adds Node to
    your PATH, and an already-open terminal will not have picked that up.
 3. Type:
@@ -183,9 +184,7 @@ you exactly this — it does not draw a half-finished picture.
 
 ---
 
-graphviz and Graphviz are optional
-
-## Step 3a — Install the Python `graphviz` package
+## Step 3a — Install the Python `graphviz` package (Optional)
 
 Type:
 
@@ -200,12 +199,12 @@ This is the small piece of Python code that knows how to *describe* a diagram.
 
 ---
 
-## Step 3b — Install the Graphviz **program** (the step people forget)
+## Step 3b — Install the Graphviz **program** (Optional)
 
 This trips almost everyone up the first time. There are **two separate things
 both called "graphviz"**:
 
-- the Python package from Step 2 — describes the diagram, but can't draw it;
+- the Python package from Step 3a — describes the diagram, but can't draw it;
 - the Graphviz **program** — the actual drawing engine.
 
 You need both. If you skip this step, running the script gives an error
@@ -259,10 +258,8 @@ space, then the folder path:
 ```
 cd "full\path\to\this\folder
 ```
-
 Press Enter. Nothing visible happens — that's success. The text to the left of your
 cursor should now show that folder.
-
 
 To check you're in the right place, type `dir` and press Enter. You should see
 `make_groundfish_diagrams.py` in the list.
