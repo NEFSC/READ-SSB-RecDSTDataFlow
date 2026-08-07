@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GroundfishRDM diagrams - compare with previous</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --ink: #1c2530;
+    --muted: #5f6b7a;
+    --line: #d3d9e0;
+    --accent: #2d6ca2;
+  }
+  * { box-sizing: border-box; }
+  /* The toolbar groups and the legend are flex containers, and an explicit
+     display beats the hidden attribute's default display:none -- so without
+     this the blink controls and the swipe legend stay on screen in every
+     mode. */
+  [hidden] { display: none !important; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+  }
+  header {
+    padding: 18px 22px 14px; background: var(--panel);
+    border-bottom: 1px solid var(--line);
+  }
+  h1 { margin: 0 0 4px; font-size: 19px; }
+  .sub { color: var(--muted); font-size: 13px; }
+  .bar {
+    display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+    padding: 10px 22px; background: var(--panel);
+    border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5;
+  }
+  .group { display: flex; gap: 6px; align-items: center; }
+  .group > .lbl {
+    color: var(--muted); font-size: 12px; text-transform: uppercase;
+    letter-spacing: .04em; margin-right: 2px;
+  }
+  button {
+    font: inherit; font-size: 13px; padding: 5px 11px; cursor: pointer;
+    background: #fff; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 6px;
+  }
+  button:hover { border-color: var(--accent); }
+  button[aria-pressed="true"] {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  .wrap { padding: 16px 22px 40px; }
+  .stage {
+    position: relative; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 8px; overflow: auto; max-height: 74vh;
+  }
+  .canvas { position: relative; }
+  .canvas img { position: absolute; top: 0; left: 0; display: block; }
+  .clip { position: absolute; top: 0; left: 0; height: 100%; overflow: hidden; }
+  .handle {
+    position: absolute; top: 0; bottom: 0; width: 2px; background: #e0512f;
+    cursor: ew-resize; z-index: 3;
+  }
+  .handle::after {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%;
+    background: #e0512f; box-shadow: 0 1px 5px rgba(0,0,0,.35);
+  }
+  .pair { display: flex; gap: 12px; }
+  .pair .half { flex: 1 1 0; min-width: 0; }
+  .pair .half h3 {
+    margin: 0 0 6px; font-size: 13px; font-weight: 600; color: var(--muted);
+  }
+  .pair .stage { max-height: 68vh; }
+  .note {
+    padding: 30px 22px; color: var(--muted); background: var(--panel);
+    border: 1px dashed var(--line); border-radius: 8px; text-align: center;
+  }
+  .legend {
+    display: flex; gap: 20px; margin: 10px 0 0; color: var(--muted);
+    font-size: 12px;
+  }
+  .swatch { display: inline-block; width: 22px; height: 3px; vertical-align: middle; }
+  details {
+    margin: 18px 22px 0; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 8px; padding: 10px 14px;
+  }
+  summary { cursor: pointer; font-weight: 600; }
+  pre {
+    margin: 10px 0 2px; padding: 12px; background: #f3f5f8;
+    border-radius: 6px; overflow-x: auto; font-size: 12.5px; line-height: 1.45;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>GroundfishRDM pipeline diagrams &mdash; compare with previous</h1>
+  <div class="sub">Generated 2026-07-22 15:32. The pictures are the files in this
+    folder; previous versions come from <code>archive/</code>.</div>
+</header>
+
+<div class="bar">
+  <div class="group" id="tabs"><span class="lbl">Diagram</span></div>
+  <div class="group" id="modes">
+    <span class="lbl">View</span>
+    <button data-mode="swipe" aria-pressed="true">Swipe</button>
+    <button data-mode="side" aria-pressed="false">Side by side</button>
+    <button data-mode="blink" aria-pressed="false">Blink</button>
+  </div>
+  <div class="group">
+    <span class="lbl">Zoom</span>
+    <button id="zoomFit">Fit</button>
+    <button id="zoomOut">&minus;</button>
+    <span id="zoomLabel" class="sub" style="min-width:4em;text-align:center"></span>
+    <button id="zoomIn">+</button>
+  </div>
+  <div class="group" id="blinkGroup" hidden>
+    <span class="lbl">Blink</span>
+    <button id="blinkToggle" aria-pressed="true">Pause</button>
+    <button id="showOld">Previous</button>
+    <button id="showNew">Current</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="dates" class="sub" style="margin-bottom:10px"></div>
+  <div id="viewer"></div>
+  <div class="legend" id="legend" hidden>
+    <span><span class="swatch" style="background:#e0512f"></span> divider &mdash;
+      drag it, or use the left/right arrow keys</span>
+  </div>
+</div>
+
+<details open>
+  <summary>What changed since the last run</summary>
+  <pre>WHAT CHANGED SINCE THE LAST RUN
+------------------------------------------------------------------------------
+  Comparing against the version generated 2026-07-22 08:05.
+
+  The pipeline is unchanged since the last run.</pre>
+</details>
+
+<script>
+var PANELS = [{"name": "comprehensive", "title": "Comprehensive", "current": "GroundfishRDM_comprehensive_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_comprehensive_pipeline_diagram_2026-07-22_0809.png", "previousDate": "2026-07-22 08:09"}, {"name": "simple", "title": "Simple", "current": "GroundfishRDM_simple_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_simple_pipeline_diagram_2026-07-22_0809.png", "previousDate": "2026-07-22 08:09"}, {"name": "data", "title": "Data-focused", "current": "GroundfishRDM_data_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_data_pipeline_diagram_2026-07-22_0809.png", "previousDate": "2026-07-22 08:09"}];
+
+var state = { panel: PANELS[0], mode: "swipe", zoom: null, split: 50,
+               blinkOn: true, blinkShowNew: true };
+var blinkTimer = null;
+var natural = {};            // filename -> [width, height]
+
+var viewer = document.getElementById("viewer");
+var datesEl = document.getElementById("dates");
+var legendEl = document.getElementById("legend");
+var blinkGroup = document.getElementById("blinkGroup");
+var zoomLabel = document.getElementById("zoomLabel");
+
+/* --- tabs ------------------------------------------------------------- */
+var tabs = document.getElementById("tabs");
+PANELS.forEach(function (p) {
+  var b = document.createElement("button");
+  b.textContent = p.title;
+  b.setAttribute("aria-pressed", p === state.panel ? "true" : "false");
+  b.onclick = function () {
+    state.panel = p;
+    state.zoom = null;                       // refit when switching diagrams
+    [].forEach.call(tabs.querySelectorAll("button"), function (o) {
+      o.setAttribute("aria-pressed", o === b ? "true" : "false");
+    });
+    render();
+  };
+  tabs.appendChild(b);
+});
+
+/* --- mode buttons ------------------------------------------------------ */
+[].forEach.call(document.querySelectorAll("#modes button"), function (b) {
+  b.onclick = function () {
+    state.mode = b.dataset.mode;
+    [].forEach.call(document.querySelectorAll("#modes button"), function (o) {
+      o.setAttribute("aria-pressed", o === b ? "true" : "false");
+    });
+    render();
+  };
+});
+
+/* --- zoom -------------------------------------------------------------- */
+document.getElementById("zoomFit").onclick = function () { state.zoom = null; render(); };
+document.getElementById("zoomIn").onclick = function () {
+  state.zoom = (state.zoom || fitWidth()) * 1.35; render();
+};
+document.getElementById("zoomOut").onclick = function () {
+  state.zoom = (state.zoom || fitWidth()) / 1.35; render();
+};
+
+/* --- blink controls ---------------------------------------------------- */
+document.getElementById("blinkToggle").onclick = function () {
+  state.blinkOn = !state.blinkOn;
+  this.textContent = state.blinkOn ? "Pause" : "Play";
+  this.setAttribute("aria-pressed", state.blinkOn ? "true" : "false");
+  render();
+};
+document.getElementById("showOld").onclick = function () {
+  state.blinkOn = false; state.blinkShowNew = false;
+  document.getElementById("blinkToggle").textContent = "Play";
+  render();
+};
+document.getElementById("showNew").onclick = function () {
+  state.blinkOn = false; state.blinkShowNew = true;
+  document.getElementById("blinkToggle").textContent = "Play";
+  render();
+};
+
+/* --- sizing ------------------------------------------------------------ */
+/* Both versions are drawn at the same WIDTH, so they line up even when a
+   layout change made the new picture a different size. When the heights end up
+   different, that difference is itself worth seeing. */
+function fitWidth() {
+  // Side by side has to fit TWO copies across the window, so each one gets
+  // half the room. Without this the two panes are sized for the full width and
+  // both need scrolling before you can see anything.
+  var pad = 48;
+  var room = window.innerWidth - pad;
+  if (state.mode === "side") room = (room - 12) / 2;
+  return Math.max(240, Math.min(room, naturalWidth()));
+}
+function naturalWidth() {
+  var n = natural[state.panel.current] || natural[state.panel.previous];
+  return n ? n[0] : 1200;
+}
+function displayWidth() { return state.zoom || fitWidth(); }
+function scaledHeight(file, width) {
+  var n = natural[file];
+  return n ? width * n[1] / n[0] : width * 0.6;
+}
+
+/* Read the real pixel size of every image first: the layout maths needs it,
+   and it is also how we notice the two versions are different sizes. */
+function preload(done) {
+  var files = [];
+  PANELS.forEach(function (p) {
+    if (p.currentExists) files.push(p.current);
+    if (p.previous) files.push(p.previous);
+  });
+  var left = files.length;
+  if (!left) return done();
+  files.forEach(function (f) {
+    var img = new Image();
+    img.onload = function () {
+      natural[f] = [img.naturalWidth, img.naturalHeight];
+      if (--left === 0) done();
+    };
+    img.onerror = function () { if (--left === 0) done(); };
+    img.src = f;
+  });
+}
+
+/* --- rendering --------------------------------------------------------- */
+function render() {
+  var p = state.panel;
+  clearBlink();
+  blinkGroup.hidden = state.mode !== "blink";
+  legendEl.hidden = state.mode !== "swipe";
+  zoomLabel.textContent = Math.round(displayWidth() / naturalWidth() * 100) + "%";
+
+  if (!p.currentExists) {
+    datesEl.textContent = "";
+    viewer.innerHTML = '<div class="note">This diagram has not been drawn yet.</div>';
+    return;
+  }
+  if (!p.previous) {
+    datesEl.textContent = "";
+    viewer.innerHTML = '<div class="note"><strong>No previous version archived yet.</strong>'
+      + '<br>The next run that changes this picture will archive the current one,'
+      + '<br>and it will appear here to compare against.</div>'
+      + '<div class="stage"><div class="canvas"></div></div>';
+    mountSingle(p.current);
+    return;
+  }
+
+  var sizeNote = "";
+  var a = natural[p.previous], b = natural[p.current];
+  if (a && b && (a[0] !== b[0] || a[1] !== b[1])) {
+    sizeNote = " \u00b7 the picture changed size (" + a[0] + "\u00d7" + a[1]
+             + " \u2192 " + b[0] + "\u00d7" + b[1] + ")";
+  }
+  datesEl.innerHTML = "<strong>Previous:</strong> " + p.previousDate
+    + " &nbsp;&nbsp; <strong>Current:</strong> this run" + sizeNote;
+
+  if (state.mode === "side") return renderSide(p);
+  if (state.mode === "blink") return renderBlink(p);
+  renderSwipe(p);
+}
+
+function makeCanvas() {
+  viewer.innerHTML = '<div class="stage"><div class="canvas"></div></div>';
+  return viewer.querySelector(".canvas");
+}
+
+function sizeCanvas(canvas, files) {
+  var w = displayWidth(), h = 0;
+  files.forEach(function (f) { h = Math.max(h, scaledHeight(f, w)); });
+  canvas.style.width = w + "px";
+  canvas.style.height = h + "px";
+  return w;
+}
+
+function mountSingle(file) {
+  var canvas = viewer.querySelector(".canvas");
+  var w = sizeCanvas(canvas, [file]);
+  canvas.innerHTML = '<img src="' + file + '" style="width:' + w + 'px">';
+}
+
+function renderSwipe(p) {
+  var canvas = makeCanvas();
+  var w = sizeCanvas(canvas, [p.previous, p.current]);
+  canvas.innerHTML =
+      '<img src="' + p.previous + '" style="width:' + w + 'px">'
+    + '<div class="clip"><img src="' + p.current + '" style="width:' + w + 'px"></div>'
+    + '<div class="handle"></div>';
+
+  var clip = canvas.querySelector(".clip");
+  var handle = canvas.querySelector(".handle");
+  function place(pct) {
+    state.split = Math.max(0, Math.min(100, pct));
+    clip.style.width = state.split + "%";
+    handle.style.left = state.split + "%";
+  }
+  place(state.split);
+
+  function drag(ev) {
+    var box = canvas.getBoundingClientRect();
+    var x = (ev.touches ? ev.touches[0].clientX : ev.clientX) - box.left;
+    place(x / box.width * 100);
+    ev.preventDefault();
+  }
+  handle.addEventListener("mousedown", function () {
+    document.addEventListener("mousemove", drag);
+    document.addEventListener("mouseup", function stop() {
+      document.removeEventListener("mousemove", drag);
+      document.removeEventListener("mouseup", stop);
+    });
+  });
+  handle.addEventListener("touchmove", drag, { passive: false });
+  canvas.addEventListener("click", drag);
+}
+
+function renderSide(p) {
+  var w = displayWidth();
+  var h = Math.max(scaledHeight(p.previous, w), scaledHeight(p.current, w));
+  viewer.innerHTML =
+      '<div class="pair">'
+    + '  <div class="half"><h3>Previous &mdash; ' + p.previousDate + '</h3>'
+    + '    <div class="stage"><div class="canvas" style="width:' + w + 'px;height:' + h + 'px">'
+    + '      <img src="' + p.previous + '" style="width:' + w + 'px"></div></div></div>'
+    + '  <div class="half"><h3>Current &mdash; this run</h3>'
+    + '    <div class="stage"><div class="canvas" style="width:' + w + 'px;height:' + h + 'px">'
+    + '      <img src="' + p.current + '" style="width:' + w + 'px"></div></div></div>'
+    + '</div>';
+
+  // Scroll the two panes together, so you are always comparing the same region.
+  var panes = viewer.querySelectorAll(".stage");
+  var syncing = false;
+  [].forEach.call(panes, function (pane) {
+    pane.addEventListener("scroll", function () {
+      if (syncing) return;
+      syncing = true;
+      [].forEach.call(panes, function (other) {
+        if (other !== pane) {
+          other.scrollTop = pane.scrollTop;
+          other.scrollLeft = pane.scrollLeft;
+        }
+      });
+      syncing = false;
+    });
+  });
+}
+
+function renderBlink(p) {
+  var canvas = makeCanvas();
+  var w = sizeCanvas(canvas, [p.previous, p.current]);
+  canvas.innerHTML =
+      '<img src="' + p.previous + '" style="width:' + w + 'px">'
+    + '<img class="top" src="' + p.current + '" style="width:' + w + 'px">';
+  var top = canvas.querySelector(".top");
+
+  function show(isNew) {
+    state.blinkShowNew = isNew;
+    top.style.visibility = isNew ? "visible" : "hidden";
+  }
+  show(state.blinkShowNew);
+  if (state.blinkOn) {
+    blinkTimer = setInterval(function () { show(!state.blinkShowNew); }, 650);
+  }
+}
+
+function clearBlink() {
+  if (blinkTimer) { clearInterval(blinkTimer); blinkTimer = null; }
+}
+
+/* Arrow keys nudge the swipe divider -- easier than dragging for a fine check. */
+document.addEventListener("keydown", function (ev) {
+  if (state.mode !== "swipe") return;
+  if (ev.key === "ArrowLeft" || ev.key === "ArrowRight") {
+    state.split += (ev.key === "ArrowLeft" ? -2 : 2);
+    render();
+    ev.preventDefault();
+  }
+});
+
+window.addEventListener("resize", function () { if (!state.zoom) render(); });
+
+preload(render);
+</script>
+</body>
+</html>
