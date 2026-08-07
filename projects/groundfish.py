@@ -432,13 +432,22 @@ LAYOUT = {
 # skip, which extensions count as data, and where the master Stata wrapper
 # sits inside the repository.
 
+from pathlib import Path
+
+# Path(__file__).resolve() gets the full path of groundfish.py
+# .parents[2] moves up 3 levels from the file (or 2 levels up from its directory):
+#   parents[0] -> ...\projects
+#   parents[1] -> ...\recDST_DataFlow
+#   parents[2] -> ...\RecreationalDST
+REPO_PATH = Path(__file__).resolve().parents[2] / "groundfishRDM"
+
+
 PROJECT = Project(
     key="groundfish",
     display_name="GroundfishRDM",
     output_prefix="GroundfishRDM_",
-    repo=r"C:/Users/minya/Documents/Recreational/groundfishRDM",
+    repo=str(REPO_PATH),
     curation=CURATION,
-
     # No reference_module: the hand-typed snapshot this used to compare
     # against (generate_dataflow_diagram_from_DATAFLOW.py, in
     # groundfish_diagrams/) was deleted, and groundfish_diagrams/ along with

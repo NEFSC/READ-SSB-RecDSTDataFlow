@@ -335,10 +335,21 @@ LAYOUT = {
 # skip, which extensions count as data, and where the master Stata wrapper
 # sits inside the repository.
 
+from pathlib import Path
+
+# Path(__file__).resolve() gets the full path of groundfish.py
+# .parents[2] moves up 3 levels from the file (or 2 levels up from its directory):
+#   parents[0] -> ...\projects
+#   parents[1] -> ...\recDST_DataFlow
+#   parents[2] -> ...\RecreationalDST
+REPO_PATH = Path(__file__).resolve().parents[2] / "flukeRDM"
+
+
+
 PROJECT = Project(
     key="fluke",
     display_name="flukeRDM",
     output_prefix="FlukeRDM_",
-    repo=r"C:/Users/minya/Documents/Recreational/flukeRDM",
+    repo=str(REPO_PATH),
     curation=CURATION,
 )

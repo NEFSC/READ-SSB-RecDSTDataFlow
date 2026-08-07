@@ -107,8 +107,14 @@ window opens with a blinking cursor. That's it.
 Everything below gets typed into that window, one line at a time, pressing Enter
 after each. Don't worry about breaking anything — none of these commands can
 damage your files.
-
 ---
+
+## Software needed
+
+Python
+node.js
+mermaid
+GraphViz - optional
 
 ## Step 1 — Check whether Python is already installed
 
@@ -119,7 +125,7 @@ python --version
 ```
 
 **If you see something like `Python 3.14.4`** (any version starting with 3.10 or
-higher is fine) — great, Python is installed. Skip to Step 2.
+higher is fine), Python is installed. Skip to Step 2.
 
 **If you see** `'python' is not recognized...` — Python isn't installed yet, or
 it was installed without the PATH option. Do Step 1b.
@@ -128,7 +134,7 @@ it was installed without the PATH option. Do Step 1b.
 
 1. Go to <https://www.python.org/downloads/>
 2. Click the big yellow **Download Python** button and run the file it downloads.
-3. **⚠️ Important, and easy to miss:** on the very first screen of the installer,
+3. **️ Important, and easy to miss:** on the very first screen of the installer,
    tick the checkbox at the bottom that says **"Add Python to PATH"** *before*
    clicking Install. If you skip this, the terminal won't be able to find Python
    afterwards and every command below will fail with "not recognized".
@@ -138,7 +144,48 @@ it was installed without the PATH option. Do Step 1b.
 
 ---
 
-## Step 2 — Install the Python `graphviz` package
+## Step 2 — Install Mermaid, the drawing program the diagrams now use
+
+The diagrams are drawn by Mermaid by default. Graphviz from Step 3 is still
+used for one of the three diagrams (see Step 7b), so you want both — but if you
+skip this step, the script will stop and tell you so.
+
+Mermaid runs on Node.js, which is a separate install:
+
+1. Download Node.js from <https://nodejs.org> — take the button labelled
+   **LTS** (the stable one), and click through the installer accepting the
+   defaults.
+2. **Close your terminal and open a fresh one.** The installer adds Node to
+   your PATH, and an already-open terminal will not have picked that up.
+3. Type:
+
+```
+npm install -g @mermaid-js/mermaid-cli
+```
+
+This downloads a private copy of the Chrome browser that Mermaid draws with —
+about 150 MB. On a slow connection it can take several minutes, and it prints
+very little while it works. That is normal; let it finish.
+
+### Confirm it worked
+
+```
+mmdc --version
+```
+
+You should see a version number like `11.16.0`. If you see "not recognized",
+close the terminal and open a new one, then try again — that fixes it most of
+the time. If it still fails, `npm root -g` will print where npm installs
+things, and the folder above that one needs to be on your PATH.
+
+If Mermaid is missing when you run the script, it stops with a message telling
+you exactly this — it does not draw a half-finished picture.
+
+---
+
+graphviz and Graphviz are optional
+
+## Step 3a — Install the Python `graphviz` package
 
 Type:
 
@@ -153,7 +200,7 @@ This is the small piece of Python code that knows how to *describe* a diagram.
 
 ---
 
-## Step 3 — Install the Graphviz **program** (the step people forget)
+## Step 3b — Install the Graphviz **program** (the step people forget)
 
 This trips almost everyone up the first time. There are **two separate things
 both called "graphviz"**:
@@ -193,63 +240,29 @@ you tick the PATH box.
 
 ---
 
-## Step 3b — Install Mermaid, the drawing program the diagrams now use
-
-The diagrams are drawn by Mermaid by default. Graphviz from Step 3 is still
-used for one of the three diagrams (see Step 7b), so you want both — but if you
-skip this step, the script will stop and tell you so.
-
-Mermaid runs on Node.js, which is a separate install:
-
-1. Download Node.js from <https://nodejs.org> — take the button labelled
-   **LTS** (the stable one), and click through the installer accepting the
-   defaults.
-2. **Close your terminal and open a fresh one.** The installer adds Node to
-   your PATH, and an already-open terminal will not have picked that up.
-3. Type:
-
-```
-npm install -g @mermaid-js/mermaid-cli
-```
-
-This downloads a private copy of the Chrome browser that Mermaid draws with —
-about 150 MB. On a slow connection it can take several minutes, and it prints
-very little while it works. That is normal; let it finish.
-
-### Confirm it worked
-
-```
-mmdc --version
-```
-
-You should see a version number like `11.16.0`. If you see "not recognized",
-close the terminal and open a new one, then try again — that fixes it most of
-the time. If it still fails, `npm root -g` will print where npm installs
-things, and the folder above that one needs to be on your PATH.
-
-If Mermaid is missing when you run the script, it stops with a message telling
-you exactly this — it does not draw a half-finished picture.
-
----
 
 ## Step 4 — Navigate to the right folder
 
 The terminal is always "sitting inside" some folder. You need it to sit inside the
-`diagrams` folder.
+this folder.
 
-The command for this is `cd` (short for "change directory"). Type `cd `, then a
+The easiest way to do this is to use windows explorer to find this folder, right click
+and then "Open in Terminal."
+
+> **Shortcut if you're ever unsure of the path:** open the folder in File Explorer,
+> click the address bar at the top, and copy what's there. Paste it after `cd `.
+> If the path contains spaces, wrap it in double quotes: `cd "C:\My Folder\Here"`.
+
+Another way is to open a terminal and then use `cd` ("change directory"). Type `cd `, then a
 space, then the folder path:
 
 ```
-cd C:\Users\minya\Documents\Recreational\diagrams
+cd "full\path\to\this\folder
 ```
 
 Press Enter. Nothing visible happens — that's success. The text to the left of your
 cursor should now show that folder.
 
-> **Shortcut if you're ever unsure of the path:** open the folder in File Explorer,
-> click the address bar at the top, and copy what's there. Paste it after `cd `.
-> If the path contains spaces, wrap it in double quotes: `cd "C:\My Folder\Here"`.
 
 To check you're in the right place, type `dir` and press Enter. You should see
 `make_groundfish_diagrams.py` in the list.
@@ -443,7 +456,7 @@ The diagrams are drawn by **Mermaid**, which arranges the detailed diagram more
 cleanly than the alternative — noticeably fewer arrows crossing each other.
 That is what you get by default, and Step 3b below installs it.
 
-**Graphviz** — the program Steps 2 and 3 install — is still available and still
+**Graphviz** — the program Step 3 install — is still available and still
 works. Add one flag:
 
 ```
@@ -524,7 +537,7 @@ dm_diagrams\` | The shared code all projects use: the extractor that reads the s
 | `diagrams\output\groundfish\pipeline_data_generated.py` | The pipeline description the extractor wrote, which all three pictures are drawn from. Machine-written and overwritten on every run — don't edit it by hand. |
 | `diagrams\README.md` | How the shared toolchain is laid out, and how to add a third project. |
 | `diagrams\output\groundfish\compare.html` | Previous version next to the current one, for spotting what a run changed (Step 6b). |
-| `diagrams\output\groundfishrchive\` | Earlier versions of the pictures, with the date in the filename. Only appears once something has changed. |
+| `diagrams\output\groundfish rchive\` | Earlier versions of the pictures, with the date in the filename. Only appears once something has changed. |
 | `fluke_diagrams\` | The **previous** setup for Fluke: a separate copy of the toolchain, superseded by `diagrams\`, kept for reference. Nothing in the new folder reads it. Groundfish's counterpart, `groundfish_diagrams\`, has been deleted; `--check` for Groundfish no longer has a hand-typed snapshot to compare against, and reports that instead. |
 | `SETUP_INSTRUCTIONS.md` | This guide. |
 | `EXTRACTOR_NOTES.md` | How to read the `--check` report, and why part of the extractor is still maintained by hand. |
