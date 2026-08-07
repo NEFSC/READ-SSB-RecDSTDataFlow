@@ -1,6 +1,10 @@
+# What is this repository
+
+This repository contains python scripts create flow diagrams by parsing the headers in the two recDSTs.  
+
 # Before you start
 
-The python code assumes that you have put this repository next to the groundfishRDM and fluke RDM repositories. 
+The code assumes that you have put this repository "next to" the groundfishRDM and fluke RDM repositories. 
 It also assumes your repository names are "groundfishRDM" and "flukeRDM".
 
 ```
@@ -8,6 +12,8 @@ mega_folder/
 ├── groundfishRDM/ 
 ├── flukeRDM/  
 ├── recDST_DataFlow/          #This repository.
+├── AnotherRepo/              #this folder is not scanned.
+
 ```
 
 # Pipeline diagrams
