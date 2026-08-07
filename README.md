@@ -24,7 +24,7 @@ mega_folder/
 One toolchain that draws pipeline diagrams for both RDM projects, and for any
 project added later.
 
-If you have never run Python before, read `../SETUP_INSTRUCTIONS.md` first —
+If you have never run Python before, read [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) first —
 it walks through installing Python and Graphviz. Everything below assumes that
 is already done.
 
