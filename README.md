@@ -1,3 +1,15 @@
+# Before you start
+
+The python code assumes that you have put this repository next to the groundfishRDM and fluke RDM repositories. 
+It also assumes your repository names are "groundfishRDM" and "flukeRDM".
+
+```
+mega_folder/
+├── groundfishRDM/ 
+├── flukeRDM/  
+├── recDST_DataFlow/          #This repository.
+```
+
 # Pipeline diagrams
 
 One toolchain that draws pipeline diagrams for both RDM projects, and for any
