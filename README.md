@@ -84,7 +84,7 @@ That download includes a private copy of the Chrome browser Mermaid draws with
 (~150 MB, so allow a few minutes). If it is missing, the run stops with an
 install message rather than a stack trace.
 
-**Graphviz** is still here, one flag away, and needs no Node. Use it when:
+**Graphviz** was the original, but it lookd really rough. You can use it by setting an option. Use it when:
 
 * **You need the simplified diagram to fit a slide.** The Graphviz version
   scales the finished drawing down to a 16:9 page; Mermaid has no equivalent,
@@ -109,8 +109,7 @@ To check what an engine actually produced, see `tests/` below.
 
 ## Comparing against the previous version
 
-Every run replaces the pictures. So that the old ones are not simply lost, each
-run also:
+Every run replaces the pictures. The code
 
 **1. Archives the previous version of any picture that changed.** Into
 `output/<project>/archive/`, with the date it was generated appended to the
@@ -121,7 +120,7 @@ GroundfishRDM_simple_pipeline_diagram_2026-07-19_2127.png
 GroundfishRDM_simple_pipeline_diagram_2026-07-20_0915.png
 ```
 
-Sorting that folder by name therefore groups each diagram together in date
+Sorting that folder by name will groups each diagram together in date
 order, so you can follow one picture's history down the list.
 
 Only versions that **actually differ** are kept: the new PNG is compared byte
@@ -164,12 +163,9 @@ will break the pictures.
 Graphviz writes a byte-identical PNG when given a byte-identical graph, and
 embeds no timestamp, so "the bytes differ" means "the picture differs".
 
-The SVG cannot be used this way. Two runs of *identical* code produce SVGs
-differing on about 136 lines, because the edge id numbers (`edge32`, `edge88`,
-…) follow the order the arrows happened to be created in, and that order comes
-from iterating a Python set. The picture is identical; only the internal
-numbering moves. So the PNG decides whether anything changed, and the SVG is
-archived alongside it whenever the PNG says yes.
+The SVG cannot be used this way.  The picture is identical, but two runs of *identical*
+code produce SVGs differing on about 136 lines, because the edge id numbers (`edge32`, `edge88`,
+…) follow the order the arrows happened to be created in
 
 **Known exception: the simplified diagram.** For that one the set ordering
 does not just move the numbering, it changes the drawing. `simplify()` builds
@@ -212,28 +208,33 @@ printing large).
 
 Two files. Nothing in `rdm_diagrams/` changes.
 
-**1. `projects/<name>.py`** — copy `projects/fluke.py` and edit the record at
+**1. `projects/bluefish.py`** — copy `projects/fluke.py` and edit the record at
 the bottom:
 
 ```python
+from pathlib import Path
+
+REPO_PATH = Path(__file__).resolve().parents[2] / "BluefishRDM"
+
+
 PROJECT = Project(
     key="bluefish",                    # the output subfolder name
     display_name="BluefishRDM",        # how it appears in titles and captions
     output_prefix="BluefishRDM_",      # goes on the front of the filenames
-    repo=r"C:/path/to/bluefishRDM",
+    repo=str(REPO_PATH),
     curation=CURATION,
 )
 ```
 
-Then work through that file's `CURATION` dictionary, which is the copied
-project's and will be wrong for yours. You do not have to get it right first
+Then work through that file's `CURATION` dictionary, which will contain the fluke or groundfish 
+curation list and will be wrong for yours. You do not have to get it right first
 time: anything the extractor finds that `CURATION` has not been told about is
 still drawn, and is also listed in the run report under "WHAT THE CODE CONTAINS
 THAT THE CURATION LIST HAS NOT MET". Run it, read that list, and fill in the
 entries it names.
 
-**2. `make_<name>_diagrams.py`** — copy `make_fluke_diagrams.py` and change the
-two occurrences of `fluke`.
+**2. `make_bluefish_diagrams.py`** — copy `make_fluke_diagrams.py` and change the
+two occurrences of `fluke` to `bluefish`.
 
 That is the whole job. If you find yourself needing to edit anything in
 `rdm_diagrams/` to make a new project work, that is a sign the thing you are
