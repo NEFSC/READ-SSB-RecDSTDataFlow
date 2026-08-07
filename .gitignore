@@ -1,18 +1,8 @@
-.Rproj.user
-*.Rproj
-.Rhistory
-*.RData
-*.Rdata
-*.Rds
-.Ruserdata
-*credentials*
-*Credentials*
-*.log
-*.html
-library.bib
-*.pdf
-*.doc
-*.docx
-*.aux
-*.out
-*.dta
+# Byte-compiled Python
+__pycache__/
+*.pyc
+
+# Timestamped snapshots kept by each make_*.py run (see --no-archive flag).
+# The current diagrams in output/<project>/ are tracked; these historical
+# copies should not be.
+output/*/archive/
