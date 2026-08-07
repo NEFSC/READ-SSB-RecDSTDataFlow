@@ -101,8 +101,7 @@ One known gap in the Mermaid version: **the stage order is close but not
 exact** (on Groundfish the calibration panel is drawn above the stage that
 feeds it). Getting it exact needs a handful of arrows drawn in reverse, and
 Mermaid cannot draw a reversed arrow without also reversing its arrowhead —
-which would state the wrong direction. The options are written up in
-`../MERMAID_MIGRATION_PLAN.md` under "Open items".
+which would state the wrong direction.
 
 To check what an engine actually produced, see `tests/` below.
 
