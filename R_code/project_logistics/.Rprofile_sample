@@ -1,0 +1,74 @@
+#############################################################################################################
+# Script:       .Rprofile_sample
+# Purpose:      **Sample** file to demonstrate how to execute some R commands at the beginning of each R session
+#
+# Inputs:       None
+# Outputs:      None. Leaves behind objects in your global environment, but does not "save" anything to drive. 
+# Dependencies:  As written, keys and tokens must be set by commented out code.
+# Pipeline:     Step 0 By placing a this in your Sys.getenv("HOME"), you will be able to 
+                connect to oracle or have your github token set without having to think about it. 
+# Note: 
+# You can use this file to load packages, set options, etc.
+# Reminder, do not commit passwords, server locations, or server ports (not a comprehensive list) to github.
+# Also look at the .Rprofile_container and R_and_keyring.R files.
+
+# How to use: Delete _sample and put this in the folder returned by Sys.getenv("HOME")
+#             DO NOT delete the leading period   
+
+# NOTE: changes in this file won't be reflected until after you quit
+#       and start a new session
+#
+#############################################################################################################
+
+#libraries
+library("keyring"")
+library("gitcreds")
+
+#############################################################################################################
+# Run this once. Each one will open a system window.
+# you will need to update your password with key_set() every time you have to update your oracle password. 
+# Set keys with this
+# key_set("my_oracle_userid")
+# key_set("my_oracle_pw_at_NEFSC")
+# key_set("my_tnsalias")
+
+# Set the FRED API KEY, GITLAB_PAT, CENSUS API KEY, and GITHUB PAT
+# key_set("my_fred_api_key")
+# key_set("my_census_api_key")
+# key_set("my_github_pat")
+
+# Use gitcreds to set your github token.
+# gitcreds::gitcreds_set()
+
+#############################################################################################################
+
+
+
+#############################################################################################################
+# load in oracle information from the keyring
+
+id<-key_get("my_oracle_userid")
+novapw<-key_get("my_oracle_pw_at_NEFSC")
+tns_alias<-key_get("my_tnsalias")
+
+# store the text into the object nefscdb_con for later evaluation.
+nefscdb_con<- quote(dbConnect(drv, username = id, password = novapw, dbname = tns_alias))
+
+#############################################################################################################
+# Sample code 
+# # drv<-dbDriver("Oracle")
+# oracle_connected<-eval(nefscdb_con)
+# See the 'R_code/data_extraction_processing/extraction/sample_oracle_query.R'
+
+
+
+# Set the FRED and CENSUS API Keys
+args = list(key_get("my_fred_api_key"), key_get("my_census_api_key"))
+names(args) = c("FRED_API_KEY", "CENSUS_API_KEY")
+
+do.call(Sys.setenv, args)
+rm(args)
+
+
+
+

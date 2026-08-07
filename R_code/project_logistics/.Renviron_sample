@@ -1,0 +1,18 @@
+# .Renviron is used to set Environment Variables. 
+# Courtesy of Beth Josephson and Dave Hiltz
+# This is probably unnecessary.
+
+# To use this, delete _sample and put this in a place that R searches for a .Renviron file.
+#      One good place is the result of Sys.getenv("HOME")
+# Don't delete the leading period   
+# This could be helpful if you are using a servers and need to use oracle
+# This could be helpful if you are trying to use git
+# I haven't used this in years.
+
+# ORACLE_HOME=/ora1/app/oracle/product/11.2.0/dbhome_1
+# ORACLE_HOME=/usr/lib/oracle/21/client64
+# GITHUB_PAT=your_pat_goeshere
+# FRED_API_KEY=your_API_KEY_goes_here
+
+# R_LIBS_USER = "//net/path/to/your/home/R/x86_64_pc-linux-gnu-library"
+

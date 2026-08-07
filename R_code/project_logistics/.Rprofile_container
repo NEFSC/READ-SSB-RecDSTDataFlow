@@ -1,0 +1,97 @@
+#############################################################################################################
+# Script:       .Rprofile_container
+# Purpose:      **Sample** file to demonstrate how to execute some R commands 
+#                at the beginning of each R session **ON A UNIX CONTAINER**
+# Inputs:       None
+# Outputs:      None. Leaves behind objects in your global environment, but does not "save" anything to drive. 
+# Dependencies: As written, keys and tokens must be set by the commented out code.
+# Pipeline:     Step 0 By placing a this in your Sys.getenv("HOME"), you will be able to 
+                connect to oracle or have your github token set without having to think about it. 
+# Note: 
+# You can use this file to load packages, set options, etc.
+# Remember, do not commit user ids, passwords, serve locations, and ports to github.
+# Also look at the .Rprofile_container and R_and_keyring.R files.
+
+# How to use: Delete _sample and put this in the folder returned by Sys.getenv("HOME")
+#             DO NOT delete the leading period   
+
+# NOTE: changes in this file won't be reflected until after you quit
+#       and start a new session
+#       I think you *could* use this for both Windows and Unix. BUT, it prompts for a passwrd, and the method in .Rprofile_sample does not.
+#       This persists over container restarts
+#############################################################################################################
+
+library("keyring")
+
+
+################RUN ONCE##########################################################
+##########################################################
+# Create and Load things into the keyring called "my_keyring". Run this interactively.
+##########################################################
+# kb <- keyring::backend_file$new()
+## Create a named keyring (**prompts for a keyring password interactively**)
+# this get's put in .config/r-keyring/my_keyring
+
+# kb$keyring_create("my_keyring")
+
+## store the object  "my_oracle_userid". Perhaps you would store your userid here?
+# kb$set(service ="my_oracle_userid", keyring = "my_keyring")
+
+## store the object  "my_oracle_pw_at_NEFSC". Perhaps you would store your password here?
+# kb$set(service ="my_oracle_pw_at_NEFSC", keyring = "my_keyring")
+# kb$set(service ="my_tnsalias", keyring = "my_keyring")
+
+# kb$set(service ="my_census_api_key", keyring = "my_keyring")
+# kb$set(service ="github_token", keyring = "my_keyring")
+
+# gitcreds::gitcreds_set()
+
+################END RUN ONCE##########################################################
+
+
+
+################Run occasionally ##########################################################
+
+########ongoing maintenance. When you have to change your password, you would run this code
+#update with 
+# kb <- keyring::backend_file$new()
+# kb$keyring_unlock("my_keyring")
+# kb$list(keyring = "my_keyring")
+# kb$set_with_value(
+#   service  = "thing_to_update",
+#   password = "password goes here",   
+#   keyring  = "my_keyring"
+# )
+################End Run occasionally ##########################################################
+
+
+
+# Reading in requires a wrapper to wait until startup is done.
+# you will get a popup that prompts you to enter your keyring passord
+setHook("rstudio.sessionInit", function(newSession) {
+  library(keyring)
+  kb <<- keyring::backend_file$new()
+  kb$keyring_unlock("my_keyring")
+  
+  id   <<- kb$get(service = "my_oracle_userid", keyring = "my_keyring")
+  mypass <<- kb$get(service = "my_oracle_pw_at_NEFSC", keyring = "my_keyring")
+  tns_alias <<- kb$get(service = "my_tnsalias", keyring = "my_keyring")
+
+  nefscdb_con <<- quote(dbConnect(drv, username = id, password = mypass, dbname = tns_alias))
+  message("Oracle creds loaded from Keyring.")
+  message("Establish and oracle connection with myconnection<-eval(nefscdb_con)")
+  
+  
+  
+  my_census_api_key <<- kb$get(service = "my_census_api_key", keyring = "my_keyring")
+
+  Sys.setenv(CENSUS_API_KEY=my_census_api_key)
+
+  message("CENSUS key set to: ", Sys.getenv("CENSUS_API_KEY"))
+  
+#cleanup
+  rm(kb, envir = .GlobalEnv)
+  
+}, action = "append")
+
+#setting github tokens is best done with gitcreds::gitcreds_set()
