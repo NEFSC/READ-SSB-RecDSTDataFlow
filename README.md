@@ -1,6 +1,6 @@
 # What is this repository
 
-This repository contains flow diagrams and python scripts for Groundfish and Fluke RDM tool
+This repository contains flow diagrams for Groundfish and Fluke RDM tool
 
 Groundfish:
 
@@ -15,13 +15,15 @@ Fluke:
 * [comprehensive pipeline](output/fluke/FlukeRDM_comprehensive_pipeline_diagram.svg)
 
 
-These diagrams are built by parsing the headers in the two recDSTs folders with a little manual curation when new scripts or data files are added.  
+These diagrams in python with *make_groundfish_diagrams.py* and *make_fluke_diagrams.py* respectively
+Those python scripts parsing the headers in the two recDSTs folders. 
+A little manual curation is neccessary when new scripts or data files are added.  
 
-Yes. They are pretty complicated and you will probably want to download the svgs to look at them.
+Yes. They are pretty complicated.
 
 # Before you start
 
-The code assumes that you have put this repository "next to" the groundfishRDM and fluke RDM repositories. 
+The python scripts assumes that you have put this repository "next to" the groundfishRDM and fluke RDM repositories. 
 It also assumes your repository names are "groundfishRDM" and "flukeRDM".
 
 ```
