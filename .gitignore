@@ -6,3 +6,4 @@ __pycache__/
 # The current diagrams in output/<project>/ are tracked; these historical
 # copies should not be.
 output/*/archive/
+.Rproj.user

@@ -56,8 +56,11 @@ CURATION = {
 
         # Stage 1-3: pulling in raw data.
         "get_assessment_from_gdrive.do": ("get_assessment", None, "acquire", False),
-        "MRIP_column_cases.do":          ("mrip_col_cases", None, "acquire", False),
-        "MRIP_lists.do":                 ("mrip_lists_do", None, "acquire", False),
+        "get_mrip_oracle.R":             ("get_mrip", None, "acquire", False),
+        "MRIP_lists.do":                 ("mrip_lists_do", None, "acquire", True),
+        "MRIP_column_cases.do":          ("mrip_col_cases", None, "acquire", True),
+        "tidyup_mrip_data_fromR.do":     ("tidyup_mrip", None, "acquire", False),
+
 
         # Stage 4-6: effort, costs, preferences.
         "directed_trips_calibration.do":  ("dtrips", None, "calib", False),
@@ -66,6 +69,7 @@ CURATION = {
         "estimate_angler_preferences.do": ("angler_prefs", "estimate_angler_preferences.do\n(estimation block disabled)", "calib", False),
 
         # Stage 7-10: calibration catch-per-trip.
+        "catch_per_trip_programs.do":  ("cpt1", None, "calib", False),
         "catch_per_trip_calibration_part1.do":  ("cpt1", None, "calib", False),
         "copula_modeling_calibration.R":        ("copula_calib", None, "calib", False),
         "calibration_catch_per_trip_part2.do":  ("cpt2", None, "calib", False),
@@ -112,12 +116,21 @@ CURATION = {
         "compare_savedregs_output.R":       ("compare_savedregs", "compare_savedregs_output.R\n(SYNTAX ERROR - does not parse)", "standalone", True),
         "generate_coastwide_data.R":        ("coastwide", None, "standalone", False),
         "rdb_catch_per_trip_to_drive.R":    ("rdb_push", "rdb_catch_per_trip_to_drive.R\n(toggle exists, never called)", "standalone", True),
+
+        # Stage 12-14, 16-17: dashboard prep and the Google Drive pushes.
+        "rdb_convert_and_push_NAA_to_gdrive.R": ("rdb_naa_drive", None, "dashboard", False),
+        "rdb_processing_NAA.do":    ("rdb_naa", None, "dashboard", False),
     },
 
     # --- Scripts left off the picture entirely -----------------------------
     "skip_scripts": {
         "googledrivesetup.R",     # one-time OAuth setup, entirely commented out
         "required_packages.R",    # one-time package install
+        "naa_helpers.R",
+        "wham_version_installer.R",
+        "flukeRDM_url.R",
+        "refval_tools.do",
+        
     },
 
     # --- Calls that exist but are not worth an arrow -----------------------
@@ -132,8 +145,12 @@ CURATION = {
     # pattern always wins over a looser one regardless of the order here.
     "data_groups": [
         # ---- Raw inputs ----
+        {"id": "mrip_raw", "stage": "acquire",
+         "label": "mrip_trip / catch /\nsize / size_b2 .dta",
+         "files": ["mrip_trip.dta", "mrip_catch.dta", "mrip_size.dta",
+                   "mrip_size_b2.dta", "mrip_pull*.Rds"]},
         {"id": "mrip_lists", "stage": "acquire",
-         "label": "$triplist $catchlist\n$b2list $sizelist\n(MRIP trip/catch/size extracts)",
+         "label": "$triplist $catchlist\n$b2list $sizelist\n(tidied MRIP extracts)",
          "files": ["trip_*.dta", "catch_*.dta", "size_*.dta", "size_b2_*.dta"]},
         {"id": "naa_files", "stage": "acquire",
          "label": "assessment numbers-at-age\nfit_NAA_* / fit_proj_NAA_* / J1_*",
@@ -250,6 +267,9 @@ CURATION = {
     # --- Data files to leave off entirely ----------------------------------
     "skip_data": [
         "*.ster",          # saved estimation results, handled as an extra node
+        "refval_fp_*.dta",   # refactor verification
+        "refval_results_*.dta",   # refactor verification
+                                                     
     ],
 
     # --- Boxes that are not files or scripts -------------------------------

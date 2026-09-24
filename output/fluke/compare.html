@@ -96,7 +96,7 @@
 
 <header>
   <h1>flukeRDM pipeline diagrams &mdash; compare with previous</h1>
-  <div class="sub">Generated 2026-08-07 09:19. The pictures are the files in this
+  <div class="sub">Generated 2026-09-24 09:11. The pictures are the files in this
     folder; previous versions come from <code>archive/</code>.</div>
 </header>
 
@@ -136,27 +136,26 @@
   <summary>What changed since the last run</summary>
   <pre>WHAT CHANGED SINCE THE LAST RUN
 ------------------------------------------------------------------------------
-  Comparing against the version generated 2026-08-07 08:29.
+  Comparing against the version generated 2026-09-24 09:10.
 
-  Boxes added (4):
-    * flukerdm_url       flukeRDM_url.R                         (calib panel)
-    * naa_helpers        naa_helpers.R                          (setup panel)
+  Boxes added (1):
+    * rdb_naa_drive      rdb_convert_and_push_NAA_to_gdrive.R   (dashboard panel)
+  Boxes removed (1):
     * rdb_convert_and_push_naa_to_gdrive rdb_convert_and_push_NAA_to_gdrive.R   (calib panel)
-    * rdb_processing_naa rdb_processing_NAA.do                  (calib panel)
-  Boxes removed: none
   Boxes changed: none
 
-  Arrows added (4):
-    * model_wrapper      -&gt; rdb_convert_and_push_naa_to_gdrive calls, if push_NAA_to_gdrive = 1 by default
-    * model_wrapper      -&gt; rdb_processing_naa calls, if prep_NAA_for_dashboard = 1 by default
-    * rdb_convert_and_push_naa_to_gdrive -&gt; dev_setup_r        calls
-    * rdb_convert_and_push_naa_to_gdrive -&gt; naa_helpers        calls
-  Arrows removed (1):
-    * get_assessment     -&gt; naa_files          writes</pre>
+  Arrows added (3):
+    * model_wrapper      -&gt; rdb_naa_drive      calls, if push_NAA_to_gdrive = 0 by default
+    * projected_cal      -&gt; rdb_naa_drive      reads
+    * rdb_naa_drive      -&gt; dev_setup_r        calls
+  Arrows removed (3):
+    * model_wrapper      -&gt; rdb_convert_and_push_naa_to_gdrive calls, if push_NAA_to_gdrive = 0 by default
+    * projected_cal      -&gt; rdb_convert_and_push_naa_to_gdrive reads
+    * rdb_convert_and_push_naa_to_gdrive -&gt; dev_setup_r        calls</pre>
 </details>
 
 <script>
-var PANELS = [{"name": "comprehensive", "title": "Comprehensive", "current": "FlukeRDM_comprehensive_pipeline_diagram.png", "currentExists": true, "previous": "archive/FlukeRDM_comprehensive_pipeline_diagram_2026-08-07_0829.png", "previousDate": "2026-08-07 08:29"}, {"name": "simple", "title": "Simple", "current": "FlukeRDM_simple_pipeline_diagram.png", "currentExists": true, "previous": "archive/FlukeRDM_simple_pipeline_diagram_2026-08-07_0829.png", "previousDate": "2026-08-07 08:29"}, {"name": "data", "title": "Data-focused", "current": "FlukeRDM_data_pipeline_diagram.png", "currentExists": true, "previous": "archive/FlukeRDM_data_pipeline_diagram_2026-08-07_0829.png", "previousDate": "2026-08-07 08:29"}];
+var PANELS = [{"name": "comprehensive", "title": "Comprehensive", "current": "FlukeRDM_comprehensive_pipeline_diagram.png", "currentExists": true, "previous": "archive/FlukeRDM_comprehensive_pipeline_diagram_2026-09-24_0910.png", "previousDate": "2026-09-24 09:10"}, {"name": "simple", "title": "Simple", "current": "FlukeRDM_simple_pipeline_diagram.png", "currentExists": true, "previous": "archive/FlukeRDM_simple_pipeline_diagram_2026-09-24_0910.png", "previousDate": "2026-09-24 09:10"}, {"name": "data", "title": "Data-focused", "current": "FlukeRDM_data_pipeline_diagram.png", "currentExists": true, "previous": "archive/FlukeRDM_data_pipeline_diagram_2026-09-24_0853.png", "previousDate": "2026-09-24 08:53"}];
 
 var state = { panel: PANELS[0], mode: "swipe", zoom: null, split: 50,
                blinkOn: true, blinkShowNew: true };

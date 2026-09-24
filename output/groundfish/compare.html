@@ -96,7 +96,7 @@
 
 <header>
   <h1>GroundfishRDM pipeline diagrams &mdash; compare with previous</h1>
-  <div class="sub">Generated 2026-08-07 09:18. The pictures are the files in this
+  <div class="sub">Generated 2026-09-24 08:53. The pictures are the files in this
     folder; previous versions come from <code>archive/</code>.</div>
 </header>
 
@@ -136,13 +136,25 @@
   <summary>What changed since the last run</summary>
   <pre>WHAT CHANGED SINCE THE LAST RUN
 ------------------------------------------------------------------------------
-  Comparing against the version generated 2026-08-07 09:17.
+  Comparing against the version generated 2026-09-24 08:46.
 
-  The pipeline is unchanged since the last run.</pre>
+  Boxes added (1):
+    * catlprogs          catch_at_length_programs.do            (catlen panel)
+  Boxes removed (1):
+    * catch_at_length_programs catch_at_length_programs.do            (calib panel)
+  Boxes changed: none
+
+  Arrows added (3):
+    * cal_len            -&gt; catlprogs          calls
+    * get_mrip           -&gt; dev_setup_r        calls
+    * proj_len           -&gt; catlprogs          calls
+  Arrows removed (2):
+    * cal_len            -&gt; catch_at_length_programs calls
+    * proj_len           -&gt; catch_at_length_programs calls</pre>
 </details>
 
 <script>
-var PANELS = [{"name": "comprehensive", "title": "Comprehensive", "current": "GroundfishRDM_comprehensive_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_comprehensive_pipeline_diagram_2026-08-07_0829.png", "previousDate": "2026-08-07 08:29"}, {"name": "simple", "title": "Simple", "current": "GroundfishRDM_simple_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_simple_pipeline_diagram_2026-08-07_0910.png", "previousDate": "2026-08-07 09:10"}, {"name": "data", "title": "Data-focused", "current": "GroundfishRDM_data_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_data_pipeline_diagram_2026-08-07_0829.png", "previousDate": "2026-08-07 08:29"}];
+var PANELS = [{"name": "comprehensive", "title": "Comprehensive", "current": "GroundfishRDM_comprehensive_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_comprehensive_pipeline_diagram_2026-09-24_0846.png", "previousDate": "2026-09-24 08:46"}, {"name": "simple", "title": "Simple", "current": "GroundfishRDM_simple_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_simple_pipeline_diagram_2026-09-24_0846.png", "previousDate": "2026-09-24 08:46"}, {"name": "data", "title": "Data-focused", "current": "GroundfishRDM_data_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_data_pipeline_diagram_2026-08-07_0829.png", "previousDate": "2026-08-07 08:29"}];
 
 var state = { panel: PANELS[0], mode: "swipe", zoom: null, split: 50,
                blinkOn: true, blinkShowNew: true };

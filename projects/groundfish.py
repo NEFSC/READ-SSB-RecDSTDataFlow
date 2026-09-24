@@ -75,6 +75,7 @@ CURATION = {
         # Stage 15 & 18: catch-at-length.
         "catch_at_length_calibration.do": ("cal_len", None, "catlen", False),
         "catch_at_length_projection.do":  ("proj_len", None, "catlen", False),
+        "catch_at_length_programs.do":  ("catlprogs", None, "catlen", False),
 
         # Stage 12-14, 16-17: dashboard prep and the Google Drive pushes.
         "rdb_processing_catch_per_trip.do": ("rdb_cpt", None, "dashboard", False),
@@ -124,7 +125,7 @@ CURATION = {
     # Format: (calling script, called script).
     "skip_calls": {
         ("copula_modeling_calibration.R", "developer_setup.R"),
-        ("get_mrip_oracle.R", "developer_setup.R"),
+        ("developer_setup.R"),
         ("rdb_catch_per_trip_to_drive.R", "developer_setup.R"),
         ("rdb_catch_at_len_to_drive.R", "developer_setup.R"),
         ("get_cod_assessment_data.R", "naa_helpers.R"),
