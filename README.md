@@ -1,9 +1,23 @@
 # What is this repository
 
-This repository contains python scripts create flow diagrams for [Groundfish](output/groundfish/GroundfishRDM_data_pipeline_diagram.svg)
-and [Fluke](output/fluke/FlukeRDM_simple_pipeline_diagram.svg) by parsing the headers in the two recDSTs.  
+This repository contains flow diagrams and python scripts for Groundfish and Fluke RDM tool
 
-Yes. They are pretty complicated and you will probably want to download the svg to look at them.
+Groundfish:
+
+* [data pipeline](output/groundfish/GroundfishRDM_data_pipeline_diagram.svg)
+* [simple pipeline](output/groundfish/GroundfishRDM_data_simple_pipeline_diagram.svg)
+* [comprehensive pipeline](output/groundfish/GroundfishRDM_comprehensive_pipeline_diagram.svg)
+
+Fluke:
+
+* [data pipeline](output/fluke/FlukeRDM_data_pipeline_diagram.svg)
+* [simple pipeline](output/fluke/FlukeRDM_simple_pipeline_diagram.svg)
+* [comprehensive pipeline](output/fluke/FlukeRDM_comprehensive_pipeline_diagram.svg)
+
+
+These diagrams are built by parsing the headers in the two recDSTs folders with a little manual curation when new scripts or data files are added.  
+
+Yes. They are pretty complicated and you will probably want to download the svgs to look at them.
 
 # Before you start
 
