@@ -25,6 +25,7 @@ STAGES = [
 
 nodes = [
     {'id': 'model_wrapper', 'label': 'model_wrapper.do\n(MASTER WRAPPER - Stata)', 'type': 'stata', 'stage': 'setup'},
+    {'id': 'r_wrapper', 'label': 'R code wrapper.R\n(R WRAPPER - entry point 2)', 'type': 'r', 'stage': 'setup'},
     {'id': 'get_assessment', 'label': 'get_assessment_from_gdrive.do', 'type': 'stata', 'stage': 'acquire'},
     {'id': 'get_mrip', 'label': 'get_mrip_oracle.R', 'type': 'r', 'stage': 'acquire'},
     {'id': 'mrip_col_cases', 'label': 'MRIP_column_cases.do', 'type': 'stata', 'stage': 'acquire', 'dead': True},
@@ -72,7 +73,6 @@ nodes = [
     {'id': 'proj_cal', 'label': 'projected_catch_at_length.csv', 'type': 'data', 'stage': 'catlen'},
     {'id': 'trawl', 'label': 'NEFSC_cruises.csv\nNEFSC_trawl_cod / _hadd.csv', 'type': 'data', 'stage': 'catlen'},
     {'id': 'export_gdrive', 'label': 'export_to_GoogleDrive.R', 'type': 'r', 'stage': 'sim'},
-    {'id': 'r_wrapper', 'label': 'R code wrapper.R\n(R WRAPPER)', 'type': 'r', 'stage': 'sim'},
     {'id': 'rec0', 'label': 'calibrate_rec_catch0.R\n(STEP 1 - pass 0)', 'type': 'r', 'stage': 'sim'},
     {'id': 'rec1', 'label': 'calibrate_rec_catch1.R\n(re-sourced inside loops)', 'type': 'r', 'stage': 'sim'},
     {'id': 'routine', 'label': 'calibration_routine.R\n(STEP 2 - driver)', 'type': 'r', 'stage': 'sim'},
