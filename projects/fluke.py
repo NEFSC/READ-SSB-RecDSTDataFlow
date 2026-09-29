@@ -48,12 +48,12 @@ CURATION = {
     # filename -> (short id, label to print in the box, stage panel, dead?)
     # A label of None means "just print the filename".
     "scripts": {
-        # Stage 0: the three entry points. Their setup helpers are deliberately
+        # Stage 0: the two entry points. Their setup helpers are deliberately
         # left off the picture -- see "skip_scripts" below.
         "model_wrapper.do":            ("model_wrapper", "model_wrapper.do\n(STATA WRAPPER - entry point 1)", "setup", False),
         "R code wrapper.R":            ("r_wrapper", "R code wrapper.R\n(R WRAPPER - entry point 2)", "setup", False),
 
-        # Stage 1-3: pulling in raw data.
+        # Stage 1: pulling in raw data.
         "get_assessment_from_gdrive.do": ("get_assessment", None, "acquire", False),
         "get_mrip_oracle.R":             ("get_mrip", None, "acquire", False),
         "MRIP_lists.do":                 ("mrip_lists_do", None, "acquire", True),
@@ -61,34 +61,35 @@ CURATION = {
         "tidyup_mrip_data_fromR.do":     ("tidyup_mrip", None, "acquire", False),
 
 
-        # Stage 4-6: effort, costs, preferences.
+        # Stage 2: effort, costs, preferences.
+        "get_mrip_trips.R":               ("get_effort", None, "calib", False),
         "directed_trips_calibration.do":  ("dtrips", None, "calib", False),
         "set_regulations.do":             ("set_regs", "set_regulations.do\n(UPDATE EVERY YEAR)", "calib", False),
         "survey_trip_costs.do":           ("trip_costs_do", None, "calib", False),
         "estimate_angler_preferences.do": ("angler_prefs", "estimate_angler_preferences.do\n(estimation block disabled)", "calib", False),
 
-        # Stage 7-10: calibration catch-per-trip.
+        # Stage 3: calibration catch-per-trip.
         "catch_per_trip_programs.do":  ("cpt1", None, "calib", False),
         "catch_per_trip_calibration_part1.do":  ("cpt1", None, "calib", False),
         "copula_modeling_calibration.R":        ("copula_calib", None, "calib", False),
         "calibration_catch_per_trip_part2.do":  ("cpt2", None, "calib", False),
         "compare_calibration_data_to_MRIP.do":  ("compare_calib", None, "calib", False),
 
-        # Stage 11-12: catch-at-length.
+        # Stage 4: catch-at-length.
         "calibration_catch_at_length.do": ("cal_catlen", None, "catlen", False),
         "projected_catch_at_length.do":   ("proj_catlen", None, "catlen", False),
 
-        # Stage 13: projection catch-per-trip (one meta-toggle gates all four).
+        # Stage 5: projection catch-per-trip (one meta-toggle gates all four).
         "catch_per_trip_projection_part1.do": ("pcpt1", None, "proj", False),
         "copula_modeling_projection.R":       ("copula_proj", None, "proj", False),
         "catch_per_trip_projection_part2.do": ("pcpt2", None, "proj", False),
         "compare_projection_data_to_MRIP.do": ("compare_proj", None, "proj", False),
 
-        # R calibration and projection.
-        "calibrate_rec_catch0_optimized.R": ("calib0", "calibrate_rec_catch0_optimized.R\n(PASS 0 - strict compliance)", "sim", False),
-        "calibration_routine_final.R":      ("calib_routine", "calibration_routine_final.R\n(search driver)", "sim", False),
-        "calibrate_rec_catch1_final.R":     ("calib1", "calibrate_rec_catch1_final.R\n(PASS 1 - reallocation)", "sim", False),
-        "predict_rec_catch_final.R":        ("predict_proj", None, "sim", False),
+        # Stage 6 : R calibration and projection.
+        "calibrate_rec_catch0.R": ("calib0", "calibrate_rec_catch0.R\n(PASS 0 - strict compliance)", "sim", False),
+        "calibration_routine.R":      ("calib_routine", "calibration_routine.R\n(search driver)", "sim", False),
+        "calibrate_rec_catch1.R":     ("calib1", "calibrate_rec_catch1.R\n(PASS 1 - reallocation)", "sim", False),
+        "predict_rec_catch.R":        ("predict_proj", None, "sim", False),
 
         # Shiny decision-support tool and the projection path it triggers.
         "app.R":                 ("app", "app.R\n(Shiny recDST)", "shiny", False),
@@ -110,15 +111,17 @@ CURATION = {
         "run_state_model.R":         ("run_state_model", "run_state_model.R\n(refactor, NOT WIRED UP)", "shiny", True),
         "apply_directed_trips_regs.R": ("apply_regs", "apply_directed_trips_regs.R\n(NEVER SOURCED)", "shiny", True),
 
+        # Stage 7: dashboard prep and the Google Drive pushes.
+        "rdb_convert_and_push_NAA_to_gdrive.R": ("rdb_naa_drive", None, "dashboard", False),
+        "rdb_processing_NAA.do":    ("rdb_naa", None, "dashboard", False),
+
+
         # Not wrapper-controlled.
         "check calibration convergence.do": ("check_conv", "check calibration convergence.do\n(manual, interactive)", "standalone", False),
         "compare_savedregs_output.R":       ("compare_savedregs", "compare_savedregs_output.R\n(SYNTAX ERROR - does not parse)", "standalone", True),
         "generate_coastwide_data.R":        ("coastwide", None, "standalone", False),
         "rdb_catch_per_trip_to_drive.R":    ("rdb_push", "rdb_catch_per_trip_to_drive.R\n(toggle exists, never called)", "standalone", True),
 
-        # Stage 12-14, 16-17: dashboard prep and the Google Drive pushes.
-        "rdb_convert_and_push_NAA_to_gdrive.R": ("rdb_naa_drive", None, "dashboard", False),
-        "rdb_processing_NAA.do":    ("rdb_naa", None, "dashboard", False),
     },
 
     # --- Scripts left off the picture entirely -----------------------------
@@ -332,13 +335,14 @@ CURATION = {
 
     # --- The panels, in the order they should appear ------------------------
     "stages": [
-        ("setup",      "STAGE 0 - Setup & orchestration (3 UNCHAINED entry points)"),
-        ("acquire",    "STAGE 1-3 - Pull raw data (assessment + MRIP)"),
-        ("calib",      "STAGE 4-10 - Calibration (effort, costs, preferences, catch-per-trip)"),
-        ("catlen",     "STAGE 11-12 - Catch-at-length (baseline + projection)"),
-        ("proj",       "STAGE 13 - Projection catch-per-trip (one meta-toggle)"),
-        ("sim",        "R CALIBRATION & PROJECTION (Code/sim)"),
+        ("setup",      "STAGE 0 - Setup & orchestration (2 UNCHAINED entry points)"),
+        ("acquire",    "STAGE 1 - Pull raw data (assessment + MRIP)"),
+        ("calib",      "STAGE 2+3 - Calibration (effort, costs, preferences, catch per trip)"),
+        ("catlen",     "STAGE 4 - Catch-at-length (baseline + projection)"),
+        ("proj",       "STAGE 5 - Projection catch-per-trip (one meta-toggle)"),
+        ("sim",        "STAGE 6 - R CALIBRATION & PROJECTION (Code/sim)"),
         ("shiny",      "SEPARATE PATH - Shiny decision-support tool & projection"),
+        ("dashboard",  "STAGE 7 -  Dashboard prep and Google Drive Pushes"),
         ("standalone", "NOT WRAPPER-CONTROLLED - standalone / manual scripts"),
     ],
 }
