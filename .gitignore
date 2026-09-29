@@ -7,3 +7,4 @@ __pycache__/
 # copies should not be.
 output/*/archive/
 .Rproj.user
+README.html
