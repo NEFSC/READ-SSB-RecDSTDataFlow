@@ -48,20 +48,18 @@ CURATION = {
     # filename -> (short id, label to print in the box, stage panel, dead?)
     # A label of None means "just print the filename".
     "scripts": {
-        # Stage 0: the two wrappers and their setup helpers.
+        # Stage 0: the master wrapper. Its two setup helpers are deliberately
+        # left off the picture -- see "skip_scripts" below.
         "model_wrapper.do":            ("model_wrapper", "model_wrapper.do\n(MASTER WRAPPER - Stata)", "setup", False),
-        "developer_setup_stata.do":    ("dev_setup_stata", None, "setup", False),
-        "R code wrapper.R":            ("r_wrapper", "R code wrapper.R\n(R WRAPPER)", "setup", False),
-        "developer_setup.R":           ("dev_setup_r", None, "setup", False),
 
-        # Stage 1-2: pulling in raw data.
+        # Stage 1: pulling in raw data.
         "get_assessment_from_gdrive.do": ("get_assessment", None, "acquire", False),
         "get_mrip_oracle.R":             ("get_mrip", None, "acquire", False),
         "tidyup_mrip_data_fromR.do":     ("tidyup_mrip", None, "acquire", False),
         "MRIP_column_cases.do":          ("mrip_col_cases", None, "acquire", True),
         "MRIP_lists.do":                 ("mrip_lists_do", None, "acquire", True),
 
-        # Stage 5-11: the main calibration chain.
+        # Stage 2: the main calibration chain.
         "directed_trips_calibration.do":      ("dtrips", None, "calib", False),
         "set_regulations.do":                 ("set_regs", "set_regulations.do\n(nested call - edit yearly)", "calib", False),
         "survey_trip_costs.do":               ("trip_costs_do", None, "calib", False),
@@ -72,22 +70,23 @@ CURATION = {
         "additional_angler_dems.do":          ("add_dems", None, "calib", False),
         "compare_calibration_data_to_MRIP.do": ("compare_mrip", None, "calib", False),
 
-        # Stage 15 & 18: catch-at-length.
+        # Stage 3: catch-at-length calibration and projection.
         "catch_at_length_calibration.do": ("cal_len", None, "catlen", False),
         "catch_at_length_projection.do":  ("proj_len", None, "catlen", False),
         "catch_at_length_programs.do":  ("catlprogs", None, "catlen", False),
 
-        # Stage 12-14, 16-17: dashboard prep and the Google Drive pushes.
-        "rdb_processing_catch_per_trip.do": ("rdb_cpt", None, "dashboard", False),
-        "rdb_catch_per_trip_to_drive.R":    ("rdb_cpt_drive", None, "dashboard", False),
-        "rdb_catch_at_length.do":           ("rdb_cal", None, "dashboard", False),
-        "rdb_catch_at_len_to_drive.R":      ("rdb_cal_drive", None, "dashboard", False),
-
-        # Stage 19: the R simulation stage.
+        # Stage 4: the R simulation stage.
+        "R code wrapper.R":        ("r_wrapper", "R code wrapper.R\n(R WRAPPER)", "sim", False),
         "calibrate_rec_catch0.R":  ("rec0", "calibrate_rec_catch0.R\n(STEP 1 - pass 0)", "sim", False),
         "calibration_routine.R":   ("routine", "calibration_routine.R\n(STEP 2 - driver)", "sim", False),
         "calibrate_rec_catch1.R":  ("rec1", "calibrate_rec_catch1.R\n(re-sourced inside loops)", "sim", False),
         "export_to_GoogleDrive.R": ("export_gdrive", None, "sim", False),
+
+        # Stage 5: dashboard prep and the Google Drive pushes.
+        "rdb_processing_catch_per_trip.do": ("rdb_cpt", None, "dashboard", False),
+        "rdb_catch_per_trip_to_drive.R":    ("rdb_cpt_drive", None, "dashboard", False),
+        "rdb_catch_at_length.do":           ("rdb_cal", None, "dashboard", False),
+        "rdb_catch_at_len_to_drive.R":      ("rdb_cal_drive", None, "dashboard", False),
 
         # The separate Shiny / projection path.
         "app.R":                        ("app", "app.R\n(SHINY DECISION-SUPPORT TOOL)", "shiny", False),
@@ -109,7 +108,16 @@ CURATION = {
     # developer conveniences (set up a Google Drive token, install a particular
     # WHAM build, hunt for a file id) or, in flukeapp.R's case, belong to the
     # other project entirely. They are real code; they are just not pipeline.
+    #
+    # The two developer_setup files are here for a related but distinct reason:
+    # they are pure boilerplate. Near enough every script in the pipeline starts
+    # by sourcing one of them to find out where the data lives, so drawing them
+    # adds a box and a dozen arrows that say nothing about the flow of data.
+    # Listing them here drops the boxes AND every arrow into or out of them,
+    # which is what we want -- a box with no arrows would be worse than no box.
     "skip_scripts": {
+        "developer_setup.R",
+        "developer_setup_stata.do",
         "fetch_NAA_from_google.R",
         "find_files_on_googledrive.R",
         "googledrivesetup.R",
@@ -118,16 +126,12 @@ CURATION = {
         "flukeapp.R",
     },
 
-    # Calls that exist in the code but are left off the picture. Every one of
-    # these is boilerplate: near enough every R script begins by sourcing
-    # developer_setup.R to find out where the data lives. Drawing all of them
-    # would add a dozen arrows that say nothing about the flow of data.
+    # Calls that exist in the code but are left off the picture, one caller at
+    # a time. Use this when a script should keep its box but one particular
+    # arrow into it is noise; to drop a script and all of its arrows at once,
+    # put it in "skip_scripts" above instead.
     # Format: (calling script, called script).
     "skip_calls": {
-        ("copula_modeling_calibration.R", "developer_setup.R"),
-        ("developer_setup.R"),
-        ("rdb_catch_per_trip_to_drive.R", "developer_setup.R"),
-        ("rdb_catch_at_len_to_drive.R", "developer_setup.R"),
         ("get_cod_assessment_data.R", "naa_helpers.R"),
         ("get_haddock_assessment_data.R", "naa_helpers.R"),
     },
@@ -396,11 +400,11 @@ CURATION = {
     # The panels the boxes are grouped into, top to bottom.
     "stages": [
         ("setup",      "STAGE 0 - Setup & orchestration"),
-        ("acquire",    "STAGE 1-2 - Pull raw data (assessment + MRIP)"),
-        ("calib",      "STAGE 5-11 - Pre-simulation calibration (Stata + R)"),
-        ("catlen",     "STAGE 15 & 18 - Catch-at-length (baseline + projection)"),
-        ("dashboard",  "STAGE 12-14, 16-17 - Dashboard prep & Google Drive push"),
-        ("sim",        "STAGE 19 - R simulation / calibration routine"),
+        ("acquire",    "STAGE 1 - Pull raw data (assessment + MRIP)"),
+        ("calib",      "STAGE 2 - Pre-simulation calibration (Stata + R)"),
+        ("catlen",     "STAGE 3 - Catch-at-length (baseline + projection)"),
+        ("sim",        "STAGE 4 - R simulation / calibration routine"),
+        ("dashboard",  "STAGE 5 - Dashboard prep & Google Drive push"),
         ("shiny",      "SEPARATE PATH - Shiny decision-support tool & projection"),
         ("standalone", "NOT WRAPPER-CONTROLLED - standalone / legacy scripts"),
     ],
