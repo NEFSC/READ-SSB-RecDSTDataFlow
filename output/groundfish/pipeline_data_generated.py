@@ -24,8 +24,6 @@ STAGES = [
 ]
 
 nodes = [
-    {'id': 'dev_setup_r', 'label': 'developer_setup.R', 'type': 'r', 'stage': 'setup'},
-    {'id': 'dev_setup_stata', 'label': 'developer_setup_stata.do', 'type': 'stata', 'stage': 'setup'},
     {'id': 'model_wrapper', 'label': 'model_wrapper.do\n(MASTER WRAPPER - Stata)', 'type': 'stata', 'stage': 'setup'},
     {'id': 'get_assessment', 'label': 'get_assessment_from_gdrive.do', 'type': 'stata', 'stage': 'acquire'},
     {'id': 'get_mrip', 'label': 'get_mrip_oracle.R', 'type': 'r', 'stage': 'acquire'},
@@ -108,7 +106,6 @@ nodes = [
 ]
 
 edges = [
-    {'from': 'model_wrapper', 'to': 'dev_setup_stata', 'kind': 'calls'},
     {'from': 'model_wrapper', 'to': 'get_assessment', 'kind': 'calls', 'toggle': 'get_assessment_from_gdrive'},
     {'from': 'model_wrapper', 'to': 'get_mrip', 'kind': 'calls', 'toggle': 'get_mrip_oracle'},
     {'from': 'model_wrapper', 'to': 'tidyup_mrip', 'kind': 'calls', 'toggle': 'get_mrip_oracle'},
@@ -127,7 +124,6 @@ edges = [
     {'from': 'model_wrapper', 'to': 'rdb_cal_drive', 'kind': 'calls', 'toggle': 'rdb_catch_at_len_to_drive', 'default_off': True},
     {'from': 'model_wrapper', 'to': 'proj_len', 'kind': 'calls', 'toggle': 'catch_at_length_project'},
     {'from': 'model_wrapper', 'to': 'r_wrapper', 'kind': 'calls', 'toggle': 'Rcodewrapper'},
-    {'from': 'r_wrapper', 'to': 'dev_setup_r', 'kind': 'calls'},
     {'from': 'r_wrapper', 'to': 'rec0', 'kind': 'calls'},
     {'from': 'r_wrapper', 'to': 'routine', 'kind': 'calls'},
     {'from': 'r_wrapper', 'to': 'export_gdrive', 'kind': 'calls'},
@@ -136,8 +132,6 @@ edges = [
     {'from': 'cal_len', 'to': 'catlprogs', 'kind': 'calls'},
     {'from': 'proj_len', 'to': 'catlprogs', 'kind': 'calls'},
     {'from': 'dtrips', 'to': 'set_regs', 'kind': 'calls'},
-    {'from': 'comm_landings', 'to': 'dev_setup_r', 'kind': 'calls'},
-    {'from': 'get_mrip', 'to': 'dev_setup_r', 'kind': 'calls'},
     {'from': 'model_run', 'to': 'predict_fns', 'kind': 'calls'},
     {'from': 'mrip_lists_do', 'to': 'mrip_lists', 'kind': 'writes'},
     {'from': 'dtrip_draws', 'to': 'r_wrapper', 'kind': 'reads'},
