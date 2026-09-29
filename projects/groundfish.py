@@ -48,10 +48,9 @@ CURATION = {
     # filename -> (short id, label to print in the box, stage panel, dead?)
     # A label of None means "just print the filename".
     "scripts": {
-        # Stage 0: the two wrappers and their setup helpers.
+        # Stage 0: the master wrapper. Its two setup helpers are deliberately
+        # left off the picture -- see "skip_scripts" below.
         "model_wrapper.do":            ("model_wrapper", "model_wrapper.do\n(MASTER WRAPPER - Stata)", "setup", False),
-        "developer_setup_stata.do":    ("dev_setup_stata", None, "setup", False),
-        "developer_setup.R":           ("dev_setup_r", None, "setup", False),
 
         # Stage 1: pulling in raw data.
         "get_assessment_from_gdrive.do": ("get_assessment", None, "acquire", False),
@@ -109,7 +108,16 @@ CURATION = {
     # developer conveniences (set up a Google Drive token, install a particular
     # WHAM build, hunt for a file id) or, in flukeapp.R's case, belong to the
     # other project entirely. They are real code; they are just not pipeline.
+    #
+    # The two developer_setup files are here for a related but distinct reason:
+    # they are pure boilerplate. Near enough every script in the pipeline starts
+    # by sourcing one of them to find out where the data lives, so drawing them
+    # adds a box and a dozen arrows that say nothing about the flow of data.
+    # Listing them here drops the boxes AND every arrow into or out of them,
+    # which is what we want -- a box with no arrows would be worse than no box.
     "skip_scripts": {
+        "developer_setup.R",
+        "developer_setup_stata.do",
         "fetch_NAA_from_google.R",
         "find_files_on_googledrive.R",
         "googledrivesetup.R",
@@ -118,16 +126,12 @@ CURATION = {
         "flukeapp.R",
     },
 
-    # Calls that exist in the code but are left off the picture. Every one of
-    # these is boilerplate: near enough every R script begins by sourcing
-    # developer_setup.R to find out where the data lives. Drawing all of them
-    # would add a dozen arrows that say nothing about the flow of data.
+    # Calls that exist in the code but are left off the picture, one caller at
+    # a time. Use this when a script should keep its box but one particular
+    # arrow into it is noise; to drop a script and all of its arrows at once,
+    # put it in "skip_scripts" above instead.
     # Format: (calling script, called script).
     "skip_calls": {
-        ("copula_modeling_calibration.R", "developer_setup.R"),
-        ("developer_setup.R"),
-        ("rdb_catch_per_trip_to_drive.R", "developer_setup.R"),
-        ("rdb_catch_at_len_to_drive.R", "developer_setup.R"),
         ("get_cod_assessment_data.R", "naa_helpers.R"),
         ("get_haddock_assessment_data.R", "naa_helpers.R"),
     },

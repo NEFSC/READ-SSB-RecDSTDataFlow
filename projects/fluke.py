@@ -48,11 +48,10 @@ CURATION = {
     # filename -> (short id, label to print in the box, stage panel, dead?)
     # A label of None means "just print the filename".
     "scripts": {
-        # Stage 0: the three entry points and their setup helpers.
+        # Stage 0: the three entry points. Their setup helpers are deliberately
+        # left off the picture -- see "skip_scripts" below.
         "model_wrapper.do":            ("model_wrapper", "model_wrapper.do\n(STATA WRAPPER - entry point 1)", "setup", False),
-        "developer_setup_stata.do":    ("dev_setup_stata", None, "setup", False),
         "R code wrapper.R":            ("r_wrapper", "R code wrapper.R\n(R WRAPPER - entry point 2)", "setup", False),
-        "developer_setup.R":           ("dev_setup_r", None, "setup", False),
 
         # Stage 1-3: pulling in raw data.
         "get_assessment_from_gdrive.do": ("get_assessment", None, "acquire", False),
@@ -123,7 +122,15 @@ CURATION = {
     },
 
     # --- Scripts left off the picture entirely -----------------------------
+    # The two developer_setup files are pure boilerplate: near enough every
+    # script in the pipeline starts by sourcing one of them to find out where
+    # the data lives, so drawing them adds a box and a dozen arrows that say
+    # nothing about the flow of data. Listing them here drops the boxes AND
+    # every arrow into or out of them -- a box with no arrows would be worse
+    # than no box at all.
     "skip_scripts": {
+        "developer_setup.R",
+        "developer_setup_stata.do",
         "googledrivesetup.R",     # one-time OAuth setup, entirely commented out
         "required_packages.R",    # one-time package install
         "naa_helpers.R",
@@ -134,11 +141,19 @@ CURATION = {
     },
 
     # --- Calls that exist but are not worth an arrow -----------------------
-    "skip_calls": {
-        ("copula_modeling_calibration.R", "developer_setup.R"),
-        ("copula_modeling_projection.R", "developer_setup.R"),
-        ("rdb_catch_per_trip_to_drive.R", "developer_setup.R"),
-    },
+    # Empty at the moment: the developer_setup boilerplate this used to list is
+    # now dropped wholesale by "skip_scripts" above. Use this when a script
+    # should keep its box but one particular arrow into it is noise.
+    # Format: (calling script, called script). Must be set() -- {} is a dict. 
+    # This is an example of how to use it as a dict:
+    # "skip_calls": {
+    #    ("get_cod_assessment_data.R", "naa_helpers.R"),
+    #    ("get_haddock_assessment_data.R", "naa_helpers.R"),
+    #},
+
+    
+    "skip_calls": set(),
+
 
     # --- Data files --------------------------------------------------------
     # One entry per BOX. Patterns are matched longest-first, so a specific
