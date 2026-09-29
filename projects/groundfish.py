@@ -51,6 +51,7 @@ CURATION = {
         # Stage 0: the master wrapper. Its two setup helpers are deliberately
         # left off the picture -- see "skip_scripts" below.
         "model_wrapper.do":            ("model_wrapper", "model_wrapper.do\n(MASTER WRAPPER - Stata)", "setup", False),
+        "R code wrapper.R":        ("r_wrapper", "R code wrapper.R\n(R WRAPPER - entry point 2)", "setup", False),
 
         # Stage 1: pulling in raw data.
         "get_assessment_from_gdrive.do": ("get_assessment", None, "acquire", False),
@@ -76,7 +77,6 @@ CURATION = {
         "catch_at_length_programs.do":  ("catlprogs", None, "catlen", False),
 
         # Stage 4: the R simulation stage.
-        "R code wrapper.R":        ("r_wrapper", "R code wrapper.R\n(R WRAPPER)", "sim", False),
         "calibrate_rec_catch0.R":  ("rec0", "calibrate_rec_catch0.R\n(STEP 1 - pass 0)", "sim", False),
         "calibration_routine.R":   ("routine", "calibration_routine.R\n(STEP 2 - driver)", "sim", False),
         "calibrate_rec_catch1.R":  ("rec1", "calibrate_rec_catch1.R\n(re-sourced inside loops)", "sim", False),
