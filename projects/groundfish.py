@@ -51,7 +51,7 @@ CURATION = {
         # Stage 0: the master wrapper. Its two setup helpers are deliberately
         # left off the picture -- see "skip_scripts" below.
         "model_wrapper.do":            ("model_wrapper", "model_wrapper.do\n(MASTER WRAPPER - Stata)", "setup", False),
-        "R code wrapper.R":        ("r_wrapper", "R code wrapper.R\n(R WRAPPER - entry point 2)", "setup", False),
+        "R_code_wrapper.R":             ("r_wrapper", "R_code_wrapper.R\n(R WRAPPER - entry point 2)", "setup", False),
 
         # Stage 1: pulling in raw data.
         "get_assessment_from_gdrive.do": ("get_assessment", None, "acquire", False),
@@ -80,7 +80,7 @@ CURATION = {
         "calibrate_rec_catch0.R":  ("rec0", "calibrate_rec_catch0.R\n(STEP 1 - pass 0)", "sim", False),
         "calibration_routine.R":   ("routine", "calibration_routine.R\n(STEP 2 - driver)", "sim", False),
         "calibrate_rec_catch1.R":  ("rec1", "calibrate_rec_catch1.R\n(re-sourced inside loops)", "sim", False),
-        "export_to_GoogleDrive.R": ("export_gdrive", None, "sim", False),
+        "export_all_to_GDrive.R":           ("export_gdrive", None, "sim", False),
 
         # Stage 5: dashboard prep and the Google Drive pushes.
         "rdb_processing_catch_per_trip.do": ("rdb_cpt", None, "dashboard", False),
@@ -321,7 +321,7 @@ CURATION = {
         # in place"). A human reads that and knows exactly what is meant; a
         # parser has nothing to grab.
         #
-        # This list shrinks as headers improve. "R code wrapper.R" used to need
+        # This list shrinks as headers improve. "R_code_wrapper.R" used to need
         # an entry here for the FST copies it writes; its Outputs field now
         # names those four files outright, so the extractor finds them itself
         # and the hand-written line was deleted. That is the direction of
@@ -382,7 +382,7 @@ CURATION = {
         # and drawing it would reverse the arrow that matters (the app is what
         # PRODUCES a regulation set).
         ("saved_regs", "app", "reads", "UI convenience; the app is the producer here"),
-        # "R code wrapper.R" says in its Outputs field that the downstream .fst
+        # "R_code_wrapper.R" says in its Outputs field that the downstream .fst
         # files are "written by the sourced scripts". True, and the picture
         # credits those scripts -- so the wrapper does not also get the arrow.
         ("r_wrapper", "calib_comp", "writes", "written by calibrate_rec_catch0.R"),

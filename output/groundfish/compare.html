@@ -96,7 +96,7 @@
 
 <header>
   <h1>GroundfishRDM pipeline diagrams &mdash; compare with previous</h1>
-  <div class="sub">Generated 2026-09-29 10:25. The pictures are the files in this
+  <div class="sub">Generated 2026-10-06 08:13. The pictures are the files in this
     folder; previous versions come from <code>archive/</code>.</div>
 </header>
 
@@ -136,20 +136,32 @@
   <summary>What changed since the last run</summary>
   <pre>WHAT CHANGED SINCE THE LAST RUN
 ------------------------------------------------------------------------------
-  Comparing against the version generated 2026-09-29 09:45.
+  Comparing against the version generated 2026-09-29 10:24.
 
-  Boxes added: none
+  Boxes added (3):
+    * copula_both        copula_both.r                          (calib panel)
+    * uc__d              _uc_&lt;d&gt;.dta                            (calib panel)
+    * uncertainty_data   uncertainty_data.do                    (calib panel)
   Boxes removed: none
   Boxes changed (2):
-    * r_wrapper          stage: &#x27;sim&#x27; -&gt; &#x27;setup&#x27;
-    * r_wrapper          label: &#x27;R code wrapper.R / (R WRAPPER)&#x27; -&gt; &#x27;R code wrapper.R / (R WRAPPER - entry point 2)&#x27;
+    * export_gdrive      label: &#x27;export_to_GoogleDrive.R&#x27; -&gt; &#x27;export_all_to_GDrive.R&#x27;
+    * r_wrapper          label: &#x27;R code wrapper.R / (R WRAPPER - entry point 2)&#x27; -&gt; &#x27;R_code_wrapper.R / (R WRAPPER - entry point 2)&#x27;
 
-  Arrows added: none
-  Arrows removed: none</pre>
+  Arrows added (8):
+    * baseline_xlsx      -&gt; copula_both        reads
+    * bcal               -&gt; uncertainty_data   reads
+    * copula_both        -&gt; draws_raw          writes
+    * copula_both        -&gt; uc__d              writes
+    * dtrip_draws        -&gt; uncertainty_data   reads
+    * model_wrapper      -&gt; export_gdrive      calls, if export_all_to_GDrive = 0 by default
+    * sim_totals3        -&gt; uncertainty_data   reads
+    * uncertainty_data   -&gt; rdb_cal_dta        writes
+  Arrows removed (1):
+    * r_wrapper          -&gt; export_gdrive      calls</pre>
 </details>
 
 <script>
-var PANELS = [{"name": "comprehensive", "title": "Comprehensive", "current": "GroundfishRDM_comprehensive_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_comprehensive_pipeline_diagram_2026-09-29_0945.png", "previousDate": "2026-09-29 09:45"}, {"name": "simple", "title": "Simple", "current": "GroundfishRDM_simple_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_simple_pipeline_diagram_2026-09-29_0945.png", "previousDate": "2026-09-29 09:45"}, {"name": "data", "title": "Data-focused", "current": "GroundfishRDM_data_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_data_pipeline_diagram_2026-09-29_0945.png", "previousDate": "2026-09-29 09:45"}];
+var PANELS = [{"name": "comprehensive", "title": "Comprehensive", "current": "GroundfishRDM_comprehensive_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_comprehensive_pipeline_diagram_2026-09-29_1025.png", "previousDate": "2026-09-29 10:25"}, {"name": "simple", "title": "Simple", "current": "GroundfishRDM_simple_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_simple_pipeline_diagram_2026-09-29_1025.png", "previousDate": "2026-09-29 10:25"}, {"name": "data", "title": "Data-focused", "current": "GroundfishRDM_data_pipeline_diagram.png", "currentExists": true, "previous": "archive/GroundfishRDM_data_pipeline_diagram_2026-09-29_1025.png", "previousDate": "2026-09-29 10:25"}];
 
 var state = { panel: PANELS[0], mode: "swipe", zoom: null, split: 50,
                blinkOn: true, blinkShowNew: true };
