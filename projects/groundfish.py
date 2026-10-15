@@ -55,6 +55,9 @@ CURATION = {
 
         # Stage 1: pulling in raw data.
         "get_assessment_from_gdrive.do": ("get_assessment", None, "acquire", False),
+        "process_cod_assessment_data.R":     ("get_cod", None, "acquire", False),
+        "process_haddock_assessment_data.R": ("get_hadd", None, "acquire", False),
+        "process_commercial_landings.R":     ("comm_landings", None, "acquire", False),
         "get_mrip_oracle.R":             ("get_mrip", None, "acquire", False),
         "tidyup_mrip_data_fromR.do":     ("tidyup_mrip", None, "acquire", False),
         "MRIP_column_cases.do":          ("mrip_col_cases", None, "acquire", True),
@@ -96,11 +99,10 @@ CURATION = {
 
         # Standalone: present in the repo, but no wrapper runs them.
         "compile_input_data_for_dashboard.do": ("compile_dash", "compile_input_data_for_dashboard.do\n(hardcoded paths)", "standalone", False),
-        "get_cod_assessment_data.R":     ("get_cod", None, "standalone", False),
-        "get_haddock_assessment_data.R": ("get_hadd", None, "standalone", False),
         "RP_data_analysis.do":           ("rp_analysis", None, "standalone", False),
         "baseline_and_projected_NAL.do": ("base_nal", None, "standalone", False),
-        "get_commercial_landings.R":     ("comm_landings", None, "standalone", False),
+        "uncertainty_data.do":           ("uncertainty", None, "standalone", True),
+        "copula_both.r":                 ("uncertainty", None, "standalone", True),
         "required_packages.R":           ("req_pkgs", "required_packages.R\n(run once, by hand)", "standalone", False),
     },
 
@@ -119,6 +121,7 @@ CURATION = {
         "developer_setup.R",
         "developer_setup_stata.do",
         "fetch_NAA_from_google.R",
+        "export_assess_to_gdrive.R",
         "find_files_on_googledrive.R",
         "googledrivesetup.R",
         "naa_helpers.R",
